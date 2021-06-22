@@ -168,7 +168,7 @@ app.route("/decks/:deckTitle/:cardTitle")
     }
   })
 })
-.delete( (req,res) => { // Delete a specific card in a specific deck NOT WORKING
+.delete( (req,res) => { // Delete a specific card in a specific deck
   Deck.findOne({title:req.params.deckTitle}, (err, foundDeck) => {
     if(!err) {
       let cardArr = foundDeck.cards;
@@ -186,7 +186,7 @@ app.route("/decks/:deckTitle/:cardTitle")
       });
     } else {
       res.send(err);
-    }  
+    }
   });
 });
 
