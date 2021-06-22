@@ -23,9 +23,11 @@ This api uses a local mongoose database at the moment, running on port 27017, bu
 *DELETE*: Will delete a specific card reference in a deck. **YOU WILL LOSE THIS CARD, CANNOT BE UNDONE*    
 
 ### "draw/:customDeckName"    
-*GET*: retrieves a random card from the specified decks    
+*GET*: retrieves a random card from the specified decks. There is an internal array in each deck to track and make sure cards are not drawn multiple times until the user chooses to reset the decks.
+*DELETE*:   
 
-#TO BE IMPLEMENTED:    
-### "draw/:customDeckName"    
-*GET*: track the indexes drawn, to ensure that repeats are not drawn until the entire deck has been gone through.    
+---
+
+##TO BE IMPLEMENTED:    
+### "draw/:customDeckName"       
 *DELETE*: reset the index tracks, essentially restarting your game, and shuffling all used cards back into the decks.    

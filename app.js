@@ -18,7 +18,8 @@ mongoose.connect(mongoURI, {
 
 const deckSchema = {
   title: String,
-  cards: Array
+  cards: Array,
+  drawnCards: [Number]
 };
 const Deck = mongoose.model("Deck", deckSchema);
 
@@ -192,16 +193,50 @@ app.route("/decks/:deckTitle/:cardTitle")
 
 
 //-----------------GET A RANDOM CARD FROM A SPECIFIC DECK------------------
-app.get("/draw/:deckTitle", (req, res) => {
+app.route("/draw/:deckTitle")
+.get( (req, res) => {
   Deck.findOne({title:req.params.deckTitle}, (err, foundDeck) => {
     if(!err) {
       let deck = foundDeck.cards;
       let randIndex = Math.floor(Math.random()*deck.length);
-      res.send(deck[randIndex].cardTitle+"\n"+deck[randIndex].cardContent);
+      let drawnArr = foundDeck.drawnCards;
+      if(drawnArr.length===deck.length)
+      {
+        res.send("All cards drawn. Reshuffle Deck.")
+      } else {
+        let count = 1;
+        while(drawnArr.find(index => index===randIndex)!=undefined) {
+          console.log("Re-rolling number, attempt #"+count+++":");
+          randIndex = Math.floor(Math.random()*deck.length);
+          console.log(randIndex);
+        }
+        drawnArr.push(randIndex);
+        Deck.updateOne({title:foundDeck.title},
+        {drawnCards: drawnArr},
+        {new: true},
+        (err2, updatedDeck) => {
+            if(err2) {
+              res.send(err2);
+            }
+        });
+        res.send(deck[randIndex].cardTitle+"\n"+deck[randIndex].cardContent);
+      }
     } else {
       res.send(err);
     }
   });
+})
+.delete( (req, res) => {
+  Deck.updateOne({title:req.params.deckTitle},
+    {drawnCards: []},
+    {new: true},
+    (err, foundDeck) => {
+    if(!err) {
+      res.send("Deck reshuffled");
+    } else {
+      res.send(err);
+    }
+  })
 });
 
 
