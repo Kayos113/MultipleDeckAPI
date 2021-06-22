@@ -123,11 +123,11 @@ app.route("/decks/:deckTitle/:cardTitle")
       Deck.updateOne( {title:foundDeck.title},
       {cards: cardArr},
       {new: true},
-      (err, updatedDeck) => {
-        if(!err) {
+      (err2, updatedDeck) => {
+        if(!err2) {
           res.send("Successfully updated the card in " + req.params.deckTitle);
         } else {
-          res.send(err);
+          res.send(err2);
         }
       })
     } else {
@@ -156,11 +156,11 @@ app.route("/decks/:deckTitle/:cardTitle")
       Deck.updateOne( {title:foundDeck.title},
       {cards: cardArr},
       {new: true},
-      (err, updatedDeck) => {
-        if(!err) {
+      (err2, updatedDeck) => {
+        if(!err2) {
           res.send("Successfully updated the card in " + req.params.deckTitle);
         } else {
-          res.send(err);
+          res.send(err2);
         }
       })
     } else {
@@ -168,8 +168,26 @@ app.route("/decks/:deckTitle/:cardTitle")
     }
   })
 })
-.delete( (req,res) => { // Delete a specific card in a specific deck
-
+.delete( (req,res) => { // Delete a specific card in a specific deck NOT WORKING
+  Deck.findOne({title:req.params.deckTitle}, (err, foundDeck) => {
+    if(!err) {
+      let cardArr = foundDeck.cards;
+      let indexOf = cardArr.find(card => card.cardTitle===req.params.cardTitle);
+      cardArr = cardArr.splice(indexOf,1);
+      Deck.updateOne({title:foundDeck.title},
+      {cards: cardArr},
+      {new: true},
+      (err2, updatedDeck) => {
+          if(!err2) {
+            res.send("Successfully deleted card from " + req.params.deckTitle);
+          } else {
+            res.send(err2);
+          }
+      });
+    } else {
+      res.send(err);
+    }  
+  });
 });
 
 
