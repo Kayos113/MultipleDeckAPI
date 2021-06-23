@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-
-const mongoURI = "mongodb://localhost:27017/DeckDB";
+const password = "SaturvinNatilly";
+const db = "DeckDB";
+const mongoURI = "mongodb+srv://Will:"+password+"@deckcluster.bcf3e.mongodb.net/"+db+"?retryWrites=true&w=majority";
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
