@@ -22,8 +22,10 @@ exports.postDecks = (req,res) => { // Create a new deck
   });
   newDeck.save((err) => {
     if(!err) {
+      console.log("DECK CREATED");
       res.send("Deck created successfully");
     } else {
+      console.log("DECK NOT CREATED");
       res.send(err);
     }
   });

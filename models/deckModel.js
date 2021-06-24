@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
-const password = "SaturvinNatilly";
-const db = "DeckDB";
-const mongoURI = "mongodb+srv://Will:"+password+"@deckcluster.bcf3e.mongodb.net/"+db+"?retryWrites=true&w=majority";
-mongoose.connect(mongoURI, {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/DeckDB', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
-}); // Connect to Mongo Database
+})
+.then(connect => console.log("Connected to mongodb.."))
+.catch(err => console.log("Could not connect to mongodb",err)); // Connect to Mongo Database
 
 const deckSchema = {
   title: String,
