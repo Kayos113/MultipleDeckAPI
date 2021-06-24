@@ -38,6 +38,10 @@ app.route("/draw/:deckTitle")
 .get(controller.drawCard)
 .delete(controller.reshuffleDeck);
 
+//------------------------------DEFAULT ROUTE------------------------------
+app.get("/", (req, res) => {
+  res.sendFile(__dirname+"/README.md");
+})
 
 //-----------------------------SERVER SPIN UP------------------------------
 app.listen(7000, (err) => {
