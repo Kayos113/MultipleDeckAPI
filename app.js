@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const controller = require('./controllers/deckController');
+const connection = require('./conn/connection');
 
 
 const app = express();
@@ -48,7 +49,7 @@ let port = process.env.PORT;
 if (port == null || port == "") {
   port = 7000;
 }
-app.listen(port, (err) => {
+app.listen(port, '54.84.138.60', (err) => {
   if(!err) {
     console.log("DeckAPI spinning up on port: " + port);
   } else {
