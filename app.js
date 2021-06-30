@@ -50,7 +50,7 @@ let ip = connection.ip
 if (port == null || port == "") {
   port = 7000;
 }
-app.listen(port, ip, (err) => {
+app.listen(port, (err) => {
   if(!err) {
     console.log("DeckAPI spinning up on port: " + port);
   } else {
