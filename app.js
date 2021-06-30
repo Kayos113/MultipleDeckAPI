@@ -46,10 +46,11 @@ app.get("/", (req, res) => {
 
 //-----------------------------SERVER SPIN UP------------------------------
 let port = process.env.PORT;
+let ip = connection.ip
 if (port == null || port == "") {
   port = 7000;
 }
-app.listen(port, '54.84.138.60', (err) => {
+app.listen(port, ip, (err) => {
   if(!err) {
     console.log("DeckAPI spinning up on port: " + port);
   } else {
