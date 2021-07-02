@@ -5,7 +5,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/DeckDB', 
   useFindAndModify: false
 })
 .then(connect => console.log("Connected to mongodb.."))
-.catch(err => console.log("Could not connect to mongodb",err)); // Connect to Mongo Database
+.catch(err => console.log("Could not connect to mongodb\n",err)); // Connect to Mongo Database
 
 const deckSchema = {
   title: String,

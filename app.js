@@ -50,7 +50,7 @@ let ip = connection.ip
 if (port == null || port == "") {
   port = 7000;
 }
-app.listen(port, (err) => {
+app.listen(port, (err) => { //Currently quotaguardstatic is installed in this instance of node, but is not integrated to give this application a static ip for secure access to mongodb. Currently my work around it to give global access to my cluster.
   if(!err) {
     console.log("DeckAPI spinning up on port: " + port);
   } else {
