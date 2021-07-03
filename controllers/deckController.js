@@ -3,7 +3,7 @@ let Deck = model.Deck;
 
 
 //Route "/decks"
-exports.getDecks = (req,res) => { // Get all decks
+exports.getDecks = function(req, res) { // Get all decks
   Deck.find({}, (err, foundDecks) => {
     if(!err) {
       res.send(foundDecks);
@@ -13,11 +13,10 @@ exports.getDecks = (req,res) => { // Get all decks
   });
 }
 
-exports.postDecks = (req,res) => { // Create a new deck
-  const deckTitle = req.body.title;
+exports.postDecks = function(req, res) { // Create a new deck
   const arr = [];
   const newDeck = new Deck ({
-    title: deckTitle,
+    title: req.body.deckTitle,
     cards: arr
   });
   newDeck.save((err) => {
@@ -31,7 +30,7 @@ exports.postDecks = (req,res) => { // Create a new deck
   });
 }
 
-exports.deleteDecks = (req,res) => { // Delete all decks
+exports.deleteDecks = function(req, res) { // Delete all decks
   Deck.deleteMany({}, (err) => {
     if(!err) {
       res.send('Successfully deleted all decks');
@@ -42,8 +41,8 @@ exports.deleteDecks = (req,res) => { // Delete all decks
 }
 
 //Route "/decks/:customDeckName"
-exports.getSingleDeck = (req,res) => { // Get all cards from a specific deck
-  Deck.find({title:req.body.deckTitle}, (err, foundDeck) => {
+exports.getSingleDeck = function(req, res, deckTitle) { // Get all cards from a specific deck
+  Deck.find({title:deckTitle}, (err, foundDeck) => {
     if(!err) {
       res.send(foundDeck);
     } else {
@@ -52,9 +51,9 @@ exports.getSingleDeck = (req,res) => { // Get all cards from a specific deck
   });
 }
 
-exports.postCard = (req,res) => { // Create a new card in a specific deck
+exports.postCard = function(req, res, deckTitle) { // Create a new card in a specific deck
   const newCard = {cardTitle:req.body.cardTitle, cardContent:req.body.cardContent}
-  Deck.updateOne( {title: req.body.deckTitle},
+  Deck.updateOne( {title: deckTitle},
   {$push:{cards:newCard}},
   {new:true},
   (err, updatedDeck) => {
@@ -66,8 +65,8 @@ exports.postCard = (req,res) => { // Create a new card in a specific deck
   });
 }
 
-exports.deleteCards = (req,res) => { // Delete all cards in a specific deck
-  Deck.updateOne({title:req.body.deckTitle},
+exports.deleteCards = function(req, res, deckTitle) { // Delete all cards in a specific deck
+  Deck.updateOne({title:deckTitle},
     {cards:[]},
     {new:true},
     (err, foundDeck) => {
@@ -80,24 +79,24 @@ exports.deleteCards = (req,res) => { // Delete all cards in a specific deck
 }
 
 //Route "/decks/:customDeckName/:customCardName"
-exports.getCard = (req,res) => { // Get a specific card from a specific deck
-  Deck.findOne({title:req.body.deckTitle}, (err, foundDeck) => {
+exports.getCard = function(req, res, deckTitle, cardTitle) { // Get a specific card from a specific deck
+  Deck.findOne({title:deckTitle}, (err, foundDeck) => {
     if(!err) {
       let cardArr = foundDeck.cards;
-      res.send(cardArr.find(card => card.cardTitle===req.body.cardTitle));
+      res.send(cardArr.find(card => card.cardTitle===cardTitle));
     } else {
       res.send(err);
     }
   })
 }
 
-exports.putCard = (req,res) => { // Updates a specific card in a specific deck WITH OVERWRITE
+exports.putCard = function(req, res, deckTitle, cardTitle) { // Updates a specific card in a specific deck WITH OVERWRITE
   const newTitle = req.body.cardTitle;
   const newContent = req.body.cardContent;
-  Deck.findOne({title:req.body.deckTitle}, (err, foundDeck) => {
+  Deck.findOne({title:deckTitle}, (err, foundDeck) => {
     if(!err) {
       const cardArr = foundDeck.cards;
-      const cardtemp = cardArr.find(card => card.cardTitle===req.body.cardTitle);
+      const cardtemp = cardArr.find(card => card.cardTitle===cardTitle);
       const index = cardArr.indexOf(cardtemp);
       cardArr[index] = {
         cardTitle: newTitle,
@@ -108,7 +107,7 @@ exports.putCard = (req,res) => { // Updates a specific card in a specific deck W
       {new: true},
       (err2, updatedDeck) => {
         if(!err2) {
-          res.send("Successfully updated the card in " + req.body.deckTitle);
+          res.send("Successfully updated the card in " + deckTitle);
         } else {
           res.send(err2);
         }
@@ -119,13 +118,13 @@ exports.putCard = (req,res) => { // Updates a specific card in a specific deck W
   })
 }
 
-exports.patchCard = (req,res) => { // Updates a specific card in a specific deck WITHOUT OVERWRITE
+exports.patchCard = function(req, res, deckTitle, cardTitle) { // Updates a specific card in a specific deck WITHOUT OVERWRITE
   let newTitle = req.body.cardTitle;
   let newContent = req.body.cardContent;
-  Deck.findOne({title:req.body.deckTitle}, (err, foundDeck) => {
+  Deck.findOne({title:deckTitle}, (err, foundDeck) => {
     if(!err) {
       const cardArr = foundDeck.cards;
-      const cardtemp = cardArr.find(card => card.cardTitle===req.body.cardTitle);
+      const cardtemp = cardArr.find(card => card.cardTitle===cardTitle);
       const index = cardArr.indexOf(cardtemp);
       if(newTitle==="") {
         newTitle = cardtemp.cardTitle;
@@ -142,7 +141,7 @@ exports.patchCard = (req,res) => { // Updates a specific card in a specific deck
       {new: true},
       (err2, updatedDeck) => {
         if(!err2) {
-          res.send("Successfully updated the card in " + req.body.deckTitle);
+          res.send("Successfully updated the card in " + deckTitle);
         } else {
           res.send(err2);
         }
@@ -153,18 +152,18 @@ exports.patchCard = (req,res) => { // Updates a specific card in a specific deck
   })
 }
 
-exports.deleteCard = (req,res) => { // Delete a specific card in a specific deck
-  Deck.findOne({title:req.body.deckTitle}, (err, foundDeck) => {
+exports.deleteCard = function(req, res, deckTitle, cardTitle) { // Delete a specific card in a specific deck
+  Deck.findOne({title:deckTitle}, (err, foundDeck) => {
     if(!err) {
       let cardArr = foundDeck.cards;
-      let indexOf = cardArr.find(card => card.cardTitle===req.body.cardTitle);
+      let indexOf = cardArr.find(card => card.cardTitle===cardTitle);
       cardArr = cardArr.splice(indexOf,1);
       Deck.updateOne({title:foundDeck.title},
       {cards: cardArr},
       {new: true},
       (err2, updatedDeck) => {
           if(!err2) {
-            res.send("Successfully deleted card from " + req.body.deckTitle);
+            res.send("Successfully deleted card from " + deckTitle);
           } else {
             res.send(err2);
           }
@@ -176,8 +175,8 @@ exports.deleteCard = (req,res) => { // Delete a specific card in a specific deck
 }
 
 //Route "/draw/:customeDeckName"
-exports.drawCard = (req, res) => {
-  Deck.findOne({title:req.body.deckTitle}, (err, foundDeck) => {
+exports.drawCard = (req, res, deckTitle) => {
+  Deck.findOne({title:deckTitle}, (err, foundDeck) => {
     if(!err) {
       let deck = foundDeck.cards;
       let randIndex = Math.floor(Math.random()*deck.length);
@@ -209,8 +208,8 @@ exports.drawCard = (req, res) => {
   });
 }
 
-exports.reshuffleDeck = (req, res) => {
-  Deck.updateOne({title:req.body.deckTitle},
+exports.reshuffleDeck = (req, res, deckTitle) => {
+  Deck.updateOne({title:deckTitle},
     {drawnCards: []},
     {new: true},
     (err, foundDeck) => {

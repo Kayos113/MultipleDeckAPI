@@ -15,29 +15,29 @@ app.use(express.static('public'));
 
 //----------------------- ROUTE TO ALL DECKS -----------------------------
 app.route("/decks")
-.get(controller.getDecks)
-.post(controller.postDecks)
-.delete(controller.deleteDecks);
+.get((req,res) => {controller.getDecks(req,res);})
+.post((req,res) => {controller.postDecks(req,res);})
+.delete((req,res) => {controller.deleteDecks(req,res);});
 
 //------------------- ROUTE TO A SPECIFIC DECK ----------------------------
 app.route("/decks/:deckTitle")
-.get(controller.getSingleDeck)
-.post(controller.postCard)
-.delete(controller.deleteCards);
+.get((req,res) => {controller.getSingleDeck(req,res, req.params.deckTitle);})
+.post((req,res) => {controller.postCard(req,res, req.params.deckTitle);})
+.delete((req,res) => {controller.deleteCards(req,res, req.params.deckTitle);});
 
 
 //--------------- ROUTE TO A SPECIFIC CARD IN A SPECIFIC DECK -------------
 app.route("/decks/:deckTitle/:cardTitle")
-.get(controller.getCard)
-.put(controller.putCard)
-.patch(controller.patchCard)
-.delete(controller.deleteCard);
+.get((req,res) => {controller.getCard(req,res,req.params.deckTitle,req.params.cardTitle);})
+.put((req,res) => {controller.putCard(req,res,req.params.deckTitle,req.params.cardTitle);})
+.patch((req,res) => {controller.patchCard(req,res,req.params.deckTitle,req.params.cardTitle);})
+.delete((req,res) => {controller.deleteCard(req,res,req.params.deckTitle,req.params.cardTitle);});
 
 
 //-----------------GET A RANDOM CARD FROM A SPECIFIC DECK------------------
 app.route("/draw/:deckTitle")
-.get(controller.drawCard)
-.delete(controller.reshuffleDeck);
+.get((req,res) => {controller.drawCard(req,res, req.params.deckTitle);})
+.delete((req,res) => {controller.reshuffleDeck(req,res, req.params.deckTitle);});
 
 //------------------------------DEFAULT ROUTE------------------------------
 app.get("/", (req, res) => {
