@@ -8,7 +8,7 @@ This api uses a local mongoose database at the moment, running on port 27017, bu
 ## RESTful routes:    
 ### "/decks"    
 *GET*: retrieves all deck objects at once.    
-*POST*: creates a new deck. The deck title is set by the body passing a value for title through the request. (req.body.title)    
+*POST*: creates a new deck. The deck title is set by the body passing a value for title through the request. (req.body.deckTitle)    
 *DELETE*: clears out all deck objects. CANNOT BE UNDONE, YOU WILL LOSE ALL DECKS AND CARDS    
 
 ### "/decks/:customDeckName"    

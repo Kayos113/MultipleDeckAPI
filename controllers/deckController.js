@@ -15,6 +15,7 @@ exports.getDecks = function(req, res) { // Get all decks
 
 exports.postDecks = function(req, res) { // Create a new deck
   const arr = [];
+  console.log(req.body);
   const newDeck = new Deck ({
     title: req.body.deckTitle,
     cards: arr
