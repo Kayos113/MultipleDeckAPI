@@ -175,7 +175,7 @@ exports.deleteCard = function(req, res, deckTitle, cardTitle) { // Delete a spec
   });
 }
 
-//Route "/draw/:customeDeckName"
+//Route "/draw/:customDeckName"
 exports.drawCard = (req, res, deckTitle) => {
   Deck.findOne({title:deckTitle}, (err, foundDeck) => {
     if(!err) {
@@ -201,7 +201,7 @@ exports.drawCard = (req, res, deckTitle) => {
               res.send(err2);
             }
         });
-        res.send(deck[randIndex].cardTitle+"\n"+deck[randIndex].cardContent);
+        res.send(deck[randIndex]);
       }
     } else {
       res.send(err);
